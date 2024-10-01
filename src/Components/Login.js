@@ -10,18 +10,34 @@ const UserLoginForm = ({ setUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Clear any previous errors
     try {
+      // Make the login request
       const response = await axios.post(
         "https://myhairapp.fly.dev/users/api/login",
         { email, password },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json", // Explicitly set content type
+          },
+        }
       );
+
       // Save the token to localStorage
       localStorage.setItem("token", response.data.token); // Store token manually
       setUser(response.data.user);
-      navigate("/");
+      navigate("/"); // Redirect after successful login
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred during login");
+      // Handle error with better debugging
+      const message =
+        err.response?.data?.message || "An error occurred during login";
+
+      // Log the error for debugging
+      console.error("Login error:", err.response || err.message);
+
+      // Display the error message to the user
+      setError(message);
     }
   };
 
