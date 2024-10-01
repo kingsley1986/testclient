@@ -4,7 +4,7 @@ import { UserCircle } from "lucide-react";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://myhairapp.fly.dev",
+  baseURL: "https://myhairapp.fly.dev",
   withCredentials: true, // This is crucial for sending cookies
 });
 
