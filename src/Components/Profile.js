@@ -6,7 +6,7 @@ import axios from "axios";
 
 // Dynamically handle API base URL for different environments
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:5000",
+  baseURL: process.env.REACT_APP_API_BASE_URL || "https://myhairapp.fly.dev",
   withCredentials: true, // This is crucial for sending cookies
 });
 
