@@ -12,7 +12,7 @@ const UserLoginForm = ({ setUser }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://myhairapp.fly.dev/users/api/login",
+        "http://myhairapp.fly.dev/users/api/login",
         { email, password },
         { withCredentials: true }
       );

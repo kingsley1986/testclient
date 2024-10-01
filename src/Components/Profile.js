@@ -1,12 +1,10 @@
-// src/Components/Profile.js
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserCircle } from "lucide-react";
 import axios from "axios";
 
-// Dynamically handle API base URL for different environments
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || "https://myhairapp.fly.dev",
+  baseURL: "http://myhairapp.fly.dev",
   withCredentials: true, // This is crucial for sending cookies
 });
 
@@ -32,6 +30,7 @@ const ProfilePage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true, // Include credentials (e.g., cookies)
         });
 
         console.log("API response:", response.data); // Log the entire response
@@ -41,6 +40,7 @@ const ProfilePage = () => {
         }
 
         setUser(response.data.user);
+        console.log(user);
       } catch (err) {
         console.error(
           "Error fetching profile:",
@@ -58,7 +58,7 @@ const ProfilePage = () => {
     };
 
     fetchProfile();
-  }, [navigate]); // No need to include `user` as dependency
+  }, [navigate]);
 
   if (loading) {
     return (
