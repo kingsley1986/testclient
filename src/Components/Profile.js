@@ -1,10 +1,12 @@
+// src/Components/Profile.js
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserCircle } from "lucide-react";
 import axios from "axios";
 
+// Dynamically handle API base URL for different environments
 const api = axios.create({
-  baseURL: "https://myhairapp.fly.dev",
+  baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:5000",
   withCredentials: true, // This is crucial for sending cookies
 });
 
@@ -30,7 +32,6 @@ const ProfilePage = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          withCredentials: true, // Include credentials (e.g., cookies)
         });
 
         console.log("API response:", response.data); // Log the entire response
@@ -40,7 +41,6 @@ const ProfilePage = () => {
         }
 
         setUser(response.data.user);
-        console.log(user);
       } catch (err) {
         console.error(
           "Error fetching profile:",
@@ -58,32 +58,7 @@ const ProfilePage = () => {
     };
 
     fetchProfile();
-  }, [navigate]);
-
-  const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
-    );
-    if (!confirmDelete) return;
-
-    try {
-      const token = localStorage.getItem("token");
-
-      await api.delete(`/users/api/delete/${user._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setSuccess("Account deleted successfully. Redirecting...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    } catch (err) {
-      console.error("Error deleting account:", err);
-      setError("Failed to delete account.");
-    }
-  };
+  }, [navigate]); // No need to include `user` as dependency
 
   if (loading) {
     return (
@@ -163,26 +138,6 @@ const ProfilePage = () => {
                 <span className="font-semibold">Address:</span>{" "}
                 {user.address || "N/A"}
               </p>
-            </div>
-            <div className="mt-6 text-center">
-              <Link
-                to="/profile/edit"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300"
-              >
-                Edit Profile
-              </Link>
-              <Link
-                to="/change_password"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded ml-4 transition duration-300"
-              >
-                Change Password
-              </Link>
-              <button
-                onClick={handleDeleteAccount}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300"
-              >
-                Delete Account
-              </button>
             </div>
           </div>
         )}
